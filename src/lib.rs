@@ -31,8 +31,8 @@ pub fn run_simulation<GenomeType: Clone>(new_genome: fn() -> GenomeType,
         get_mutated_genome(&run_sim_instance.genome, &mutators)];
         let mut calc_score = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
-        for i in 0..calc_score.len() {
-            calc_score[i] = score_fn(&genome_array[i]);
+        for index in 0..calc_score.len() {
+            calc_score[index] = score_fn(&genome_array[index]);
         }
 
         for _iterations in 1..100 {
@@ -64,7 +64,7 @@ pub fn run_simulation<GenomeType: Clone>(new_genome: fn() -> GenomeType,
         } 
         if highest_new_score > run_sim_instance.score {
             not_yet_complete.push(SimulationInstance{genome: best_new_genome, score: highest_new_score});
-        } else if highest_new_score == run_sim_instance.score {
+        } else if highest_new_score == run_sim_instance.score && complete.len() <100 {
             complete.push(SimulationInstance{genome: best_new_genome, score: highest_new_score});
         }
 
@@ -95,7 +95,9 @@ fn get_sim_instance_to_run<GenomeType>(new_genome: fn() -> GenomeType,
 
 fn get_mutated_genome<GenomeType>(original_genome: &GenomeType, 
                                 mutators: &Vec<fn(genome: &GenomeType) -> GenomeType>) -> GenomeType {
-    mutators[0](original_genome)
+    let mut rng = rand::rng();
+
+    mutators[rng.random_range(0..mutators.len())](original_genome)
 }
 
 
@@ -126,8 +128,16 @@ mod tests {
     fn calculate_score(genome: &[bool; 25]) -> f64 {
         let mut score_rtn = 0.0;
 
-        for i in 0..genome.len() {
-            if genome[i] {
+        if genome[0] && !genome[1] {
+            score_rtn +=1.0;
+        }
+
+        if !genome[genome.len()-2] && genome[genome.len()-1] {
+            score_rtn +=1.0;
+        }
+
+        for i in 1..genome.len()-1 {
+            if !genome[i-1] && genome[i] && !genome[i+1] {
                 score_rtn+=1.0;
             } 
         }
@@ -136,7 +146,7 @@ mod tests {
     }
 
     fn finish(score: f64) -> bool {
-        score >=25.0
+        score >=13.0
     }
 
     fn mutate(old_genome: &[bool; 25]) -> [bool; 25] {
