@@ -5,6 +5,8 @@ struct SimulationInstance<GenomeType> {
     score: f64
 }
 
+const COMPLETE_VECTOR_MAX_SIZE: usize = 100;
+
 
 pub fn run_simulation<GenomeType: Clone>(new_genome: fn() -> GenomeType, 
                                 score_fn: fn(genome: &GenomeType) -> f64,
@@ -64,9 +66,17 @@ pub fn run_simulation<GenomeType: Clone>(new_genome: fn() -> GenomeType,
         } 
         if highest_new_score > run_sim_instance.score {
             not_yet_complete.push(SimulationInstance{genome: best_new_genome, score: highest_new_score});
-        } else if highest_new_score == run_sim_instance.score && complete.len() <100 {
+        } else if highest_new_score == run_sim_instance.score && complete.len() < COMPLETE_VECTOR_MAX_SIZE {
             complete.push(SimulationInstance{genome: best_new_genome, score: highest_new_score});
-        }
+        } else if highest_new_score == run_sim_instance.score && complete.len() == COMPLETE_VECTOR_MAX_SIZE {
+            for index in 0..complete.len() {
+                if highest_new_score > complete[index].score {
+                    complete[index] = SimulationInstance{genome: best_new_genome, score: highest_new_score};
+                    break;
+                }
+
+            }
+        } 
 
 
     }
@@ -79,7 +89,7 @@ fn get_sim_instance_to_run<GenomeType>(new_genome: fn() -> GenomeType,
 
     let mut rng = rand::rng();
 
-    if rng.random_range(0..10)==0 {
+    if rng.random_ratio(complete.len().try_into().unwrap(), (3*COMPLETE_VECTOR_MAX_SIZE).try_into().unwrap()) {
         let complete_element = complete.pop();
 
         if complete_element.is_some() {
