@@ -23,5 +23,5 @@ Scoring of mutators and crossover-mutators, could help select the best mutation 
 Any datastructure describing a solution, usually an array of booleans, enums or numbers. However, this can also be another structure, such as a tree
 structure. One requirement is that the genome must implement a clone method. The user of the library supplies a function for producing new untested genomes.
 ### Mutator
-A function for mutating an existing genome into a new similar but mutated genome. The user of the library supplies a vector of valid mutations.   
+A function for making an existing genome into a new genome, slightly mutated. The user of the library supplies a vector of mutator functions which performs valid mutations.   
 
