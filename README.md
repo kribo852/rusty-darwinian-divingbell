@@ -36,13 +36,9 @@ A function for making an existing genome into a new genome, slightly mutated. Th
     finish: fn(high_score: f64) -> bool,
 )`
 
-The API consists of a run_simulation function, taking as arguments mostly user provided functions for managing genomes. 
-The new_genome function returns a whole new genome, that is untested. 
-The score_fn function tries a genome/solution to decide its score, this can be done by a simple calculation or an advanced simulation.
-The output function writes out a description of the genome, so that the user can view the genome.
-The mutators, a vector of mutator functions.
-The finish function, decides to finish depending on the score.
-
-
-
-
+The API consists of a run_simulation function, taking as arguments mostly user provided functions for managing genomes.  
+The new_genome function returns a whole new genome, that is untested.  
+The score_fn function tries a genome/solution to decide its score, this can be done by a simple calculation or an advanced simulation.  
+The output function writes out a description of the genome, so that the user can view the genome.  
+The mutators, a vector of mutator functions.  
+The finish function, decides to finish depending on the score.  
