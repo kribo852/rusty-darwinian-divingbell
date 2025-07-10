@@ -13,17 +13,17 @@ pub fn run_simulation<GenomeType: Clone>(
     output: fn(genome: &GenomeType),
     mutators: Vec<fn(genome: &GenomeType) -> GenomeType>,
     finish: fn(high_score: f64) -> bool,
-) {
+) -> GenomeType {
     let mut complete: Vec<SimulationInstance<GenomeType>> = vec![];
     let mut not_yet_complete: Vec<SimulationInstance<GenomeType>> = vec![];
 
     let mut high_score = 0.0;
+    let mut best_genome = new_genome();
 
     while !finish(high_score) {
         let run_sim_instance =
             get_sim_instance_to_run(new_genome, &mut complete, &mut not_yet_complete);
         let mut genome_array: [GenomeType; 8] = [
-            run_sim_instance.genome.clone(),
             get_mutated_genome(&run_sim_instance.genome, &mutators),
             get_mutated_genome(&run_sim_instance.genome, &mutators),
             get_mutated_genome(&run_sim_instance.genome, &mutators),
@@ -31,6 +31,7 @@ pub fn run_simulation<GenomeType: Clone>(
             get_mutated_genome(&run_sim_instance.genome, &mutators),
             get_mutated_genome(&run_sim_instance.genome, &mutators),
             get_mutated_genome(&run_sim_instance.genome, &mutators),
+            run_sim_instance.genome,
         ];
         let mut measured_scores = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
@@ -61,6 +62,7 @@ pub fn run_simulation<GenomeType: Clone>(
 
         if highest_new_score > high_score {
             high_score = highest_new_score;
+            best_genome = best_new_genome.clone();
             output(&best_new_genome);
         }
         if highest_new_score > run_sim_instance.score {
@@ -89,6 +91,8 @@ pub fn run_simulation<GenomeType: Clone>(
             }
         }
     }
+
+    return best_genome;
 }
 
 fn find_highest_score_genome<GenomeType: Clone>(
@@ -118,10 +122,8 @@ fn get_sim_instance_to_run<GenomeType>(
     let mut rng = rand::rng();
 
     if rng.random_ratio(complete.len() as u32, (3 * COMPLETE_VECTOR_MAX_SIZE) as u32) {
-        let complete_element = complete.pop();
-
-        if complete_element.is_some() {
-            return complete_element.unwrap();
+        if !complete.is_empty() {
+            return complete.remove(rng.random_range(0..complete.len()));
         }
     }
 
