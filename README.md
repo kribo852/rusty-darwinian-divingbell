@@ -42,3 +42,5 @@ The score_fn function tries a genome/solution to decide its score, this can be d
 The output function writes out a description of the genome, so that the user can view the genome.  
 The mutators, a vector of mutator functions.  
 The finish function, decides to finish depending on the score.  
+
+Free 🇵🇸
