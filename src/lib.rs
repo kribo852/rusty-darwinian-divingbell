@@ -9,10 +9,10 @@ const COMPLETE_VECTOR_MAX_SIZE: usize = 100;
 
 pub fn run_simulation<GenomeType: Clone>(
     new_genome: fn() -> GenomeType,
-    score_fn: fn(genome: &GenomeType) -> f64,
-    output: fn(genome: &GenomeType),
-    mutators: Vec<fn(genomes: &[GenomeType]) -> GenomeType>,
-    finish: fn(high_score: f64) -> bool,
+    score_fn: fn(&GenomeType) -> f64,
+    output: fn(&GenomeType),
+    mutators: Vec<fn(&[GenomeType]) -> GenomeType>,
+    finish: fn(&GenomeType) -> bool,
 ) -> GenomeType {
     let mut complete: Vec<SimulationInstance<GenomeType>> = vec![];
     let mut not_yet_complete: Vec<SimulationInstance<GenomeType>> = vec![];
@@ -20,7 +20,7 @@ pub fn run_simulation<GenomeType: Clone>(
     let mut high_score = 0.0;
     let mut best_genome = new_genome();
 
-    while !finish(high_score) {
+    while !finish(&best_genome) {
         let run_sim_instance =
             get_sim_instance_to_run(new_genome, &mut complete, &mut not_yet_complete);
         let mut genome_array: [GenomeType; 8] = [
@@ -194,8 +194,8 @@ mod tests {
         score_rtn
     }
 
-    fn finish(score: f64) -> bool {
-        score >= 13.0
+    fn finish(genome: &[bool; 25]) -> bool {
+        calculate_score(genome) >= 13.0
     }
 
     fn mutate(old_genome: &[[bool; 25]]) -> [bool; 25] {
