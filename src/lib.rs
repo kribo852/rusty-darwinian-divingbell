@@ -11,7 +11,7 @@ pub fn run_simulation<GenomeType: Clone>(
     new_genome: fn() -> GenomeType,
     score_fn: fn(genome: &GenomeType) -> f64,
     output: fn(genome: &GenomeType),
-    mutators: Vec<fn(genome: &GenomeType) -> GenomeType>,
+    mutators: Vec<fn(genomes: &[GenomeType]) -> GenomeType>,
     finish: fn(high_score: f64) -> bool,
 ) -> GenomeType {
     let mut complete: Vec<SimulationInstance<GenomeType>> = vec![];
@@ -24,14 +24,14 @@ pub fn run_simulation<GenomeType: Clone>(
         let run_sim_instance =
             get_sim_instance_to_run(new_genome, &mut complete, &mut not_yet_complete);
         let mut genome_array: [GenomeType; 8] = [
-            get_mutated_genome(&run_sim_instance.genome, &mutators),
-            get_mutated_genome(&run_sim_instance.genome, &mutators),
-            get_mutated_genome(&run_sim_instance.genome, &mutators),
-            get_mutated_genome(&run_sim_instance.genome, &mutators),
-            get_mutated_genome(&run_sim_instance.genome, &mutators),
-            get_mutated_genome(&run_sim_instance.genome, &mutators),
-            get_mutated_genome(&run_sim_instance.genome, &mutators),
-            run_sim_instance.genome,
+            run_sim_instance.genome.clone(),
+            run_sim_instance.genome.clone(),
+            run_sim_instance.genome.clone(),
+            run_sim_instance.genome.clone(),
+            run_sim_instance.genome.clone(),
+            run_sim_instance.genome.clone(),
+            run_sim_instance.genome.clone(),
+            run_sim_instance.genome.clone(),
         ];
         let mut measured_scores = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
 
@@ -40,10 +40,9 @@ pub fn run_simulation<GenomeType: Clone>(
         }
 
         for _iterations in 1..1000 {
-            let mut rng = rand::rng();
 
             let mutated_genome = get_mutated_genome(
-                &genome_array[rng.random_range(0..measured_scores.len())],
+                &genome_array,
                 &mutators,
             );
             let temp_score = score_fn(&mutated_genome);
@@ -137,12 +136,12 @@ fn get_sim_instance_to_run<GenomeType>(
 }
 
 fn get_mutated_genome<GenomeType>(
-    original_genome: &GenomeType,
-    mutators: &Vec<fn(genome: &GenomeType) -> GenomeType>,
+    original_genomes: &[GenomeType],
+    mutators: &Vec<fn(genome: &[GenomeType]) -> GenomeType>,
 ) -> GenomeType {
     let mut rng = rand::rng();
 
-    mutators[rng.random_range(0..mutators.len())](original_genome)
+    mutators[rng.random_range(0..mutators.len())](original_genomes)
 }
 
 #[cfg(test)]
@@ -199,12 +198,14 @@ mod tests {
         score >= 13.0
     }
 
-    fn mutate(old_genome: &[bool; 25]) -> [bool; 25] {
-        let mut new_genome = old_genome.clone();
+    fn mutate(old_genome: &[[bool; 25]]) -> [bool; 25] {
         let mut rng = rand::rng();
 
+        let mut new_genome = old_genome[rng.random_range(..old_genome.len())].clone();
+        
+
         for _i in 0..5 {
-            let rndint = rng.random_range(0..new_genome.len());
+            let rndint = rng.random_range(..new_genome.len());
             new_genome[rndint] = rng.random::<bool>();
         }
 
