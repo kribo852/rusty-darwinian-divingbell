@@ -17,7 +17,7 @@ pub fn run_simulation<GenomeType: Clone>(
     let mut complete: Vec<SimulationInstance<GenomeType>> = vec![];
     let mut not_yet_complete: Vec<SimulationInstance<GenomeType>> = vec![];
 
-    let mut high_score = 0.0;
+    let mut high_score = f64::MIN;
     let mut best_genome = new_genome();
 
     while !finish(&best_genome) {
@@ -33,7 +33,7 @@ pub fn run_simulation<GenomeType: Clone>(
             run_sim_instance.genome.clone(),
             run_sim_instance.genome.clone(),
         ];
-        let mut measured_scores = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0];
+        let mut measured_scores = [f64::MIN; 8];
 
         for index in 0..measured_scores.len() {
             measured_scores[index] = score_fn(&genome_array[index]);
@@ -126,7 +126,7 @@ fn get_sim_instance_to_run<GenomeType>(
         Some(instance) => instance,
         None => SimulationInstance {
             genome: new_genome(),
-            score: 0.0,
+            score: f64::MIN,
         },
     }
 }

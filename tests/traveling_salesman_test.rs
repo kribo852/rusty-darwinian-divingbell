@@ -48,7 +48,7 @@ fn new_genome() -> [usize; PROBLEM_LEN] {
 }
 
 fn score_function(genome: &[usize; PROBLEM_LEN]) -> f64 {
-    100.0 - distance(genome)
+    -distance(genome)
 }
 
 //calculates the length/distance of a path between the nodes of the problem instance. 
@@ -73,7 +73,7 @@ fn output(genome: &[usize; PROBLEM_LEN]) {
 }
 
 fn finish(genome: &[usize; PROBLEM_LEN]) -> bool {
-    score_function(genome) > 87.0
+    score_function(genome) > -13.0
 }
 
 fn mutate(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
@@ -109,7 +109,7 @@ fn mutate2(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
 
 fn mutate3(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
 	let mut rng = rand::rng();
-	let mut genome = genomes[rng.random_range(0..genomes.len())].clone();
+	let genome = genomes[rng.random_range(0..genomes.len())].clone();
 	let swap_index = rng.random_range(0..genome.len());
 
 	mutate3_single(&genome, swap_index)
