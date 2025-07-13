@@ -40,11 +40,7 @@ pub fn run_simulation<GenomeType: Clone>(
         }
 
         for _iterations in 1..1000 {
-
-            let mutated_genome = get_mutated_genome(
-                &genome_array,
-                &mutators,
-            );
+            let mutated_genome = get_mutated_genome(&genome_array, &mutators);
             let temp_score = score_fn(&mutated_genome);
 
             for index in 0..measured_scores.len() {
@@ -202,7 +198,6 @@ mod tests {
         let mut rng = rand::rng();
 
         let mut new_genome = old_genome[rng.random_range(..old_genome.len())].clone();
-        
 
         for _i in 0..5 {
             let rndint = rng.random_range(..new_genome.len());
