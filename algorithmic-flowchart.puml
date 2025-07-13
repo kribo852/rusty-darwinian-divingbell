@@ -1,27 +1,23 @@
 @startuml
 start
 
-:measure for determinism; 
-
-while (stop condition not met?)
+while (stop condition not met?) is (No)
 
   :select genomes to test;
 
   fork 
   :run in parallel;
-  while (time interval specified not met?)
-
-  if (deteministic scores) then (Yes)
+  while (execution period is up?) is (No)
+    :mutate genome;
     :insert into array if better;
-  else (No)
-    :use statistical method t-test to determine if it is an improvement;
-  endif
 
-  endwhile
+  endwhile (Yes)
   end merge
   :save the best genomes, also save if the branch of genomes \n have been run previosly and if there is an improvement;
 
-endwhile
+endwhile (Yes)
+
+:return the best genome to the caller;
 
 stop
 @enduml
