@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::time::Instant;
 
 struct SimulationInstance<GenomeType> {
     genome: GenomeType,
@@ -19,6 +20,7 @@ pub fn run_simulation<GenomeType: Clone>(
 
     let mut high_score = f64::MIN;
     let mut best_genome = new_genome();
+    let mut cycle_run_duration: u128 = 10;
 
     while !finish(&best_genome) {
         let run_sim_instance =
@@ -39,7 +41,9 @@ pub fn run_simulation<GenomeType: Clone>(
             measured_scores[index] = score_fn(&genome_array[index]);
         }
 
-        for _iterations in 1..1000 {
+        let now = Instant::now();
+
+        while now.elapsed().as_millis() < cycle_run_duration {
             let mutated_genome = get_mutated_genome(&genome_array, &mutators);
             let temp_score = score_fn(&mutated_genome);
 
@@ -51,6 +55,11 @@ pub fn run_simulation<GenomeType: Clone>(
                 }
             }
         }
+        cycle_run_duration = match cycle_run_duration {
+            1 .. 100 => cycle_run_duration + 1,
+            100 .. 10000 => cycle_run_duration * 2,
+            _ => cycle_run_duration,
+        };
 
         let (highest_new_score, best_new_genome) =
             find_highest_score_genome(&measured_scores, &genome_array);

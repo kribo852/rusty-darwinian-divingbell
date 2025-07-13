@@ -95,11 +95,11 @@ fn finish(genome: &[usize; PROBLEM_LEN]) -> bool {
 fn mutate(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
     let mut rng = rand::rng();
     let mut new_genome = genomes[rng.random_range(0..genomes.len())].clone();
-    let no_swaps = rng.random_range(0..10);
+    let number_of_swaps = rng.random_range(1..10);
 
-    for _index in 0..no_swaps {
+    for _index in 0..number_of_swaps {
         let indexa = rng.random_range(0..new_genome.len());
-        let indexb = rng.random_range(0..new_genome.len());
+        let indexb = (indexa + rng.random_range(1..new_genome.len()))%PROBLEM_LEN;
 
         let tmp = new_genome[indexa];
         new_genome[indexa] = new_genome[indexb];
@@ -114,7 +114,7 @@ fn mutate2(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
     let mut new_genome = genomes[rng.random_range(0..genomes.len())].clone();
 
     let indexa = rng.random_range(0..new_genome.len());
-    let indexb = rng.random_range(0..new_genome.len());
+    let indexb = (indexa + rng.random_range(1..new_genome.len()))%PROBLEM_LEN;
 
     let tmp = new_genome[indexa];
     new_genome[indexa] = new_genome[indexb];
@@ -125,7 +125,7 @@ fn mutate2(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
 
 fn mutate3(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
     let mut rng = rand::rng();
-    let genome = genomes[rng.random_range(0..genomes.len())].clone();
+    let genome = genomes[rng.random_range(0..genomes.len())];
     let swap_index = rng.random_range(0..genome.len());
 
     mutate3_single(&genome, swap_index)
