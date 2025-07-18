@@ -56,8 +56,8 @@ pub fn run_simulation<GenomeType: Clone>(
             }
         }
         cycle_run_duration = match cycle_run_duration {
-            1 .. 100 => cycle_run_duration + 1,
-            100 .. 10000 => cycle_run_duration * 2,
+            1..100 => cycle_run_duration + 1,
+            100..10000 => cycle_run_duration * 2,
             _ => cycle_run_duration,
         };
 
