@@ -57,7 +57,6 @@ fn score_function(genome: &[usize; PROBLEM_LEN]) -> f64 {
     return_score
 }
 
-
 fn output(genome: &[usize; PROBLEM_LEN]) {
     for y_value in 0..PROBLEM_LEN {
         for x_value in 0..PROBLEM_LEN {
@@ -89,6 +88,3 @@ fn mutate(genomes: &[[usize; PROBLEM_LEN]]) -> [usize; PROBLEM_LEN] {
 
     new_genome
 }
-
-
-

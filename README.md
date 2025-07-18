@@ -32,9 +32,9 @@ A function for making a new genome, slightly mutated, from the array slice of co
     new_genome: fn() -> GenomeType,
     score_fn: fn(genome: &GenomeType) -> f64,
     output: fn(genome: &GenomeType),
-    mutators: Vec<fn(&[GenomeType]) -> GenomeType -> GenomeType>,
+    mutators: Vec<fn(&[GenomeType]) -> GenomeType>,
     finish: fn(best_scored_genome: &GenomeType) -> bool,
-)`
+) -> GenomeType`
 
 The API consists of a run_simulation function, taking mostly as arguments, user provided functions for managing genomes.  
 The new_genome function returns a whole new genome, that is untested.  
