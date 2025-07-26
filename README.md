@@ -2,11 +2,21 @@
 An atempt to try some Rust programming, I decided to try and make a Library in Rust for running genetic algorithms.
 This is as much a project for learning Rust as for making a fast and efficient way of running genetic algorithms. 
 
-## Example of use
-The lib.rs file contains a unit test that shows a use of the library. But the idea is really to import the library into other projects.
+## Use
+Call the function run_simulation in the module lib.rs, to run the genetic algorithm. The idea is that you can import this library into your own project, if you want to solve a problem with a genetic algorithm, as part of your own code.
 
-The test optimization problem shown in the unit test can be described as: In an array of 25 boolean (critters), give one score point for every critter which hasn´t a neighbouring critter. Then stop if the score reaches 13 points. 
 
+## Examples
+
+The examples are located in the test folder
+| Problem name | File name | implemented | wikipedia link |
+|--------------|-----------|-------------|----------------|
+| Maximimize volume of a cylinder |  | ❌ |  |
+| Eight queens problem | eight_queens_problem.rs | ✅️ | https://en.wikipedia.org/wiki/Eight_queens_puzzle |
+|Traveling salesman problem | traveling_salesman_test.rs | ✅️ | https://en.wikipedia.org/wiki/Travelling_salesman_problem |
+
+Note that the solutions to the traveling salesman problem are not optimal, and seldom better than the
+ solutions given by the greedy algorithm. But, they are usually better than a random path :).
 
 ## Plantuml
 There is a plantuml that shows how the control-flow of the library is supposed to work, but all functionality is not implemented (yet).
