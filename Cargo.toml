@@ -4,4 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+fmt = "0.1.0"
 rand = "0.9.1"
+rand_distr = "0.5.1"

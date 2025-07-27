@@ -13,7 +13,9 @@ The examples are located in the test folder
 |--------------|-----------|-------------|----------------|
 | Maximimize volume of a cylinder |  | ❌ |  |
 | Eight queens problem | eight_queens_problem.rs | ✅️ | https://en.wikipedia.org/wiki/Eight_queens_puzzle |
-|Traveling salesman problem | traveling_salesman_test.rs | ✅️ | https://en.wikipedia.org/wiki/Travelling_salesman_problem |
+| Traveling salesman problem | traveling_salesman_test.rs | ✅️ | https://en.wikipedia.org/wiki/Travelling_salesman_problem |
+| Circle packing in a square | circle_packing_in_a_square.rs          | ✅️ | https://en.wikipedia.org/wiki/Circle_packing_in_a_square |
+
 
 Note that the solutions to the traveling salesman problem are not optimal, and seldom better than the
  solutions given by the greedy algorithm. But, they are usually better than a random path :).
